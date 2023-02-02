@@ -9,7 +9,7 @@ app.get("/api/character/:id", async (req, res) => {
       `https://rickandmortyapi.com/api/character/${id}`
     );
 
-    return res.send({
+    res.send({
       id: data.id,
       name: data.name,
       status: data.status,
@@ -17,9 +17,35 @@ app.get("/api/character/:id", async (req, res) => {
       origin: data.origin.name,
       image: data.image,
       episodes: data.episode.length,
-      created: data.created
+      created: data.created,
     });
+  } catch (error) {
+    res.send({ error: error.message });
+  }
+});
 
+app.get("/api/character/page/:pageNumber", async (req, res) => {
+  const { pageNumber } = req.params;
+  try {
+    const { data } = await axios.get(
+      `https://rickandmortyapi.com/api/character/?page=${pageNumber}`
+    );
+    let results = data.results;
+    results = results.map((character) => ({
+      id: character.id,
+      name: character.name,
+      status: character.status,
+      species: character.species,
+      origin: character.origin.name,
+      image: character.image,
+      episodes: character.episode.length,
+      created: character.created,
+    }));
+
+    res.send({
+      info: data.info,
+      results: results,
+    });
   } catch (error) {
     res.send({ error: error.message });
   }
