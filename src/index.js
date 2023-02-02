@@ -41,7 +41,7 @@ app.get("/api/character/page/:pageNumber", async (req, res) => {
   }
 });
 
-app.listen(3000);
+module.exports = app;
 
 function mapResults(character) {
   return {
