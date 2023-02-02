@@ -30,17 +30,7 @@ app.get("/api/character/page/:pageNumber", async (req, res) => {
     const { data } = await axios.get(
       `https://rickandmortyapi.com/api/character/?page=${pageNumber}`
     );
-    let results = data.results;
-    results = results.map((character) => ({
-      id: character.id,
-      name: character.name,
-      status: character.status,
-      species: character.species,
-      origin: character.origin.name,
-      image: character.image,
-      episodes: character.episode.length,
-      created: character.created,
-    }));
+    const results = data.results.map(mapResults);
 
     res.send({
       info: data.info,
@@ -52,3 +42,16 @@ app.get("/api/character/page/:pageNumber", async (req, res) => {
 });
 
 app.listen(3000);
+
+function mapResults(character) {
+  return {
+    id: character.id,
+    name: character.name,
+    status: character.status,
+    species: character.species,
+    origin: character.origin.name,
+    image: character.image,
+    episodes: character.episode.length,
+    created: character.created,
+  };
+}
